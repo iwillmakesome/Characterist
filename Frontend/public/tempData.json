@@ -1,0 +1,43 @@
+{
+  "cellDatas" : [
+    {
+      "id": 1,
+      "title": "Test Slide 1",
+      "tags": "tag1,tag2,tag3",
+      "img": "public/bmo.png",
+      "people": "Bmo",
+      "view_group": "Adventure Time",
+      "flame": 100,
+      "star": 68,
+      "type": "image",
+      "date" : "2020-02-20",
+      "file_location" : "/test/test/test"
+    },
+    {
+      "id": 2,
+      "title": "Test Slide 2",
+      "tags": "tag1,tag2,tag3",
+      "img": "public/bmo.png",
+      "people": "Bmo",
+      "view_group": "Adventure Time",
+      "flame": 100,
+      "star": 68,
+      "type": "image",
+      "date" : "2020-02-20",
+      "file_location" : "/test/test/test"
+    },
+    {
+      "id": 3,
+      "title": "Test Slide 3",
+      "tags": "tag1,tag2,tag3",
+      "img": "public/bmo.png",
+      "people": "Bmo",
+      "view_group": "Adventure Time",
+      "flame": 100,
+      "star": 68,
+      "type": "image",
+      "date" : "2020-02-20",
+      "file_location" : "/test/test/test"
+    }
+  ]
+}
