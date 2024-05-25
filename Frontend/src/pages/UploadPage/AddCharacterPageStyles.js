@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { DEFAULT_GAP, colors, DEFAULT_SHADOW } from '../../styles/contants.js';
+import { colors, DEFAULT_GAP, DEFAULT_SHADOW } from '../../styles/contants.js';
 
-export const StyledAddMediaPage = styled.div`
+export const StyledAddCharacterPage = styled.div`
   width: 100%;
   height: 100%;
   display: flex;

@@ -1,4 +1,4 @@
-import { StyledSelectFileBtn } from './uploadStyles.js';
+import { StyledSelectFileBtn } from './formStyles.js';
 
 export default function SelectFileBtn({ title, fileSelectHandler }) {
   return (

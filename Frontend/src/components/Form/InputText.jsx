@@ -1,20 +1,21 @@
-import { forwardRef } from 'react';
-import { StyledInput } from './uploadStyles.js';
+import { StyledInput } from './formStyles.js';
 
-const InputText = forwardRef(
-  ({ id, title, onChangeHandler, onKeyDownHandler }, ref) => {
-    return (
-      <StyledInput>
-        <label htmlFor={`inputText${id}`}>{title}</label>
-        <input
-          id={`inputText${id}`}
-          ref={ref}
-          onChange={onChangeHandler}
-          onKeyDown={onKeyDownHandler}
-        />
-      </StyledInput>
-    );
-  }
-);
-
-export default InputText;
+export default function InputText({
+  id,
+  title,
+  onChangeHandler,
+  onKeyDownHandler,
+  inputRef,
+}) {
+  return (
+    <StyledInput>
+      <label htmlFor={`inputText${id}`}>{title}</label>
+      <input
+        id={`inputText${id}`}
+        ref={inputRef}
+        onChange={onChangeHandler}
+        onKeyDown={onKeyDownHandler}
+      />
+    </StyledInput>
+  );
+}

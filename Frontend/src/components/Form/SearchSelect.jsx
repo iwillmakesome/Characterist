@@ -1,34 +1,30 @@
-import { StyledCharacterSelect } from './UploadPageStyles.js';
+import { StyledSearchSelect } from './formStyles.js';
 
-import BMO from '@public/bmo.png';
-
+import { useEffect, useState } from 'react';
 import { useDebounce } from '@/hooks/useDebounce.js';
-import { useEffect, useRef, useState } from 'react';
-import data from '@public/developDatas/charactersData.json';
+import { useStore } from './searchSelectStore.js';
+import { Link } from 'react-router-dom';
 
-export default function SelectC({ title }) {
-  const inputRef = useRef();
+export default function SearchSelect({ title, getData, link, inputRef }) {
   const [searchKeyword, setSearchKeyword] = useState('');
-  const debounce = useDebounce(setSearchKeyword, 300);
+  const [nameInputDebounce, stopNameInputDebounce] = useDebounce(
+    setSearchKeyword,
+    300
+  );
 
-  const [searchedData, setSearchedData] = useState([]);
-  const [selectedData, setSelectedData] = useState({
-    name: '',
-    media: '',
-    image: undefined,
-  });
+  const searchedData = useStore((state) => state.searchedData);
+  const selectedData = useStore((state) => state.selectedData);
+  const setSelectedData = useStore((state) => state.setSelectedData);
 
-  const onSearchHandler = () => {
+  const onSearchChangeHandler = () => {
     const inputValue = inputRef.current.value;
-    setSelectedData({
-      name: '',
-      media: '',
-      image: undefined,
-    });
+    setSelectedData([]);
+
     if (!inputValue) {
       setSearchKeyword('');
+      stopNameInputDebounce();
     } else {
-      debounce(inputValue);
+      nameInputDebounce(inputValue);
     }
   };
 
@@ -38,20 +34,21 @@ export default function SelectC({ title }) {
     setSearchKeyword('\n');
   };
 
+  const onDeleteSelectionHandler = () => {
+    setSelectedData({});
+    inputRef.current.value = '';
+    setSearchKeyword('');
+  };
+
   useEffect(() => {
-    const filteredData = data
-      .filter((character) => {
-        if (character.name.includes(searchKeyword)) return character;
-      })
-      .slice(0, 5);
-    setSearchedData(filteredData);
+    getData(searchKeyword);
   }, [searchKeyword]);
 
   return (
-    <StyledCharacterSelect>
+    <StyledSearchSelect>
       <div>
         <h3>{title}</h3>
-        <button>Add Character</button>
+        <Link to={link.to}>{link.title}</Link>
       </div>
       <div>
         <div>
@@ -63,8 +60,13 @@ export default function SelectC({ title }) {
         </div>
         <div>
           <div>
-            <input ref={inputRef} onChange={onSearchHandler} />
-            <h4>{selectedData.media}</h4>
+            <input ref={inputRef} onChange={onSearchChangeHandler} />
+            {selectedData.media && (
+              <div>
+                <h4>{selectedData.media}</h4>
+                <button onClick={onDeleteSelectionHandler}>x</button>
+              </div>
+            )}
           </div>
           <div>
             {searchKeyword !== '\n' && !searchedData[0] && (
@@ -88,6 +90,6 @@ export default function SelectC({ title }) {
           </div>
         </div>
       </div>
-    </StyledCharacterSelect>
+    </StyledSearchSelect>
   );
 }

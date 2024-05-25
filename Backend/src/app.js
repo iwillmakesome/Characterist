@@ -7,7 +7,8 @@ const path = require('path');
 const mime = require('mime-types');
 const ffmpeg = require('fluent-ffmpeg');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
 const PORT = process.env.PORT;
 const FRONTEND_HOST = process.env.FRONTEND_HOST;
 
@@ -56,7 +57,5 @@ app.use((err, req, res) => {
 
 // start server
 app.listen(PORT, () => {
-  console.log(
-    `Successfully opened the server / PORT: ${PORT}`
-  );
+  console.log(`Successfully opened the server / PORT: ${PORT}`);
 });

@@ -14,14 +14,6 @@ export const StyledUploadPage = styled.div`
   align-items: center;
   padding: 2em;
   gap: ${DEFAULT_GAP};
-  & > div:last-child {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: ${DEFAULT_GAP};
-    overflow: hidden;
-  }
 `;
 
 export const StyledSelectedContents = styled.div`
@@ -34,17 +26,12 @@ export const StyledSelectedContents = styled.div`
   border-radius: 10px;
   overflow: hidden;
 
-  & > img {
-    height: 100%;
-    object-fit: contain;
-    box-shadow: ${DEFAULT_SHADOW};
-    background: #808080;
-  }
+  & > img,
   & > video {
     height: 100%;
     object-fit: contain;
     box-shadow: ${DEFAULT_SHADOW};
-    z-index: 0;
+    background: #808080;
   }
 `;
 
@@ -125,102 +112,6 @@ export const StyledSelectedTags = styled.div`
     font-size: 15px;
     &:hover {
       background: ${colors.yellow2};
-    }
-  }
-`;
-
-export const StyledCharacterSelect = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  & > div:first-child {
-    display: flex;
-    justify-content: space-between;
-    & > button {
-      font-size: 10px;
-    }
-  }
-  & > div:last-child {
-    height: 200px;
-    display: flex;
-    gap: 1em;
-    & > div:first-child {
-      width: 30%;
-
-      border-radius: 5px;
-      background: ${colors.baseColor1};
-      box-shadow: 0 0 10px -5px black inset;
-      overflow: hidden;
-      & > img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-      & > div {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-    & > div:last-child {
-      width: 70%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-      & > div:first-child {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid ${colors.baseColor3};
-        border-radius: 5px;
-        & > input {
-          width: 100%;
-          border: none;
-          background: transparent;
-          padding: 1em;
-          color: white;
-        }
-        & > h4 {
-          position: absolute;
-          padding: 10px;
-          right: 0;
-          font-size: 10px;
-        }
-      }
-      & > div:last-child {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        padding: 1em;
-        background: ${colors.baseColor1};
-        border-radius: 5px;
-        box-shadow: 0 0 10px -5px black inset;
-        overflow-y: scroll;
-        &::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: ${GRADIENT_PURPLE};
-          border-radius: 10000px;
-        }
-        & > button {
-          display: flex;
-          justify-content: space-between;
-          padding: 5px;
-          border-radius: 5px;
-          background: ${colors.baseColor1};
-          font-size: 10px;
-          cursor: pointer;
-          &:hover {
-            background: ${colors.baseColor2};
-          }
-        }
-      }
     }
   }
 `;

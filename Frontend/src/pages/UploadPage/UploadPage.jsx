@@ -1,6 +1,9 @@
 import { customAxios } from '@/utils/customAxios.js';
 import { useState, useRef, useEffect } from 'react';
 
+import data from '@public/developDatas/charactersData.json';
+import { useStore } from '@/components/Form/searchSelectStore.js';
+
 // styles
 import {
   StyledUploadPage,
@@ -8,7 +11,6 @@ import {
   StyledInfoInputs,
   StyledInfoInput,
   StyledSelectedTags,
-  StyledCharacterSelect,
 } from './UploadPageStyles.js';
 
 // components
@@ -17,7 +19,7 @@ import SubmitBtn from '@/components/Form/SubmitBtn.jsx';
 import SelectFileBtn from '@/components/Form/SelectFileBtn.jsx';
 import InputText from '@/components/Form/InputText.jsx';
 import SelectOptions from '@/components/Form/SelectOptions.jsx';
-import SelectC from './Select.jsx';
+import SearchSelect from '@/components/Form/SearchSelect.jsx';
 
 export default function UploadPage() {
   const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
@@ -25,8 +27,8 @@ export default function UploadPage() {
   const inputTitleRef = useRef();
   const inputTypeRef = useRef();
   const inputTagsRef = useRef();
-
   const videoRef = useRef();
+  const searchCharacterRef = useRef();
 
   const [contentData, setContentData] = useState({
     file: undefined,
@@ -36,6 +38,9 @@ export default function UploadPage() {
     media: '',
     tags: [],
   });
+
+  const setSearchedData = useStore((state) => state.setSearchedData);
+  const selectedData = useStore((state) => state.selectedData);
 
   const fileSelectHandler = (e) => {
     const file = e.target.files[0];
@@ -85,14 +90,46 @@ export default function UploadPage() {
     });
   };
 
-  const submitHandler = () => {
-    console.log(contentData);
-    // if (!contentData.title) {
-    //   alert('Title is required.');
-    //   inputTitleRef.current.focus();
-    //   return;
-    // }
+  const getSearchSelectData = async (searchKeyword) => {
+    // backend connection
+    try {
+      const res = await data
+        .filter((character) => {
+          if (character.name.includes(searchKeyword)) return character;
+        })
+        .slice(0, 5);
+      setSearchedData(res);
+    } catch (err) {
+      return;
+    }
 
+    // try {
+    //   const searchedSelectRes = await customAxios.get();
+    //   return searchedSelectRes.data;
+    // } catch (err) {
+    //   console.error(err);
+    // }
+  };
+
+  const submitHandler = async () => {
+    console.log(contentData);
+    if (!contentData.file) {
+      alert('File is required.');
+      return;
+    }
+    if (!contentData.title) {
+      alert('Title is required.');
+      inputTitleRef.current.focus();
+      return;
+    }
+    if (!contentData.character) {
+      alert('Character is required.');
+      searchCharacterRef.current.focus();
+      return;
+    }
+    alert('submitted');
+
+    // backend connection
     // try {
     //   customAxios.post(`/scenes/upload`, contentData);
     // } catch (err) {
@@ -100,80 +137,86 @@ export default function UploadPage() {
     // }
   };
 
+  useEffect(() => {
+    contentData.character = selectedData.name;
+    contentData.media = selectedData.media;
+  }, [selectedData]);
+
   return (
     <>
       <StyledUploadPage>
-        <Title title={'Form'} />
-        {!contentData.file && (
-          <SelectFileBtn
-            title={'Select File'}
-            fileSelectHandler={fileSelectHandler}
-          />
-        )}
+        <Title title={'Upload Scene'} />
+        <SelectFileBtn
+          title={'Select File'}
+          fileSelectHandler={fileSelectHandler}
+        />
 
         {contentData.file && (
-          <>
-            <StyledSelectedContents>
-              {contentData.fileType === 'video' && (
-                <video ref={videoRef} src={contentData.file} controls={true} />
-              )}
-              {contentData.fileType === 'image' && (
-                <img src={contentData.file} alt={'image'} />
-              )}
-            </StyledSelectedContents>
-
-            <StyledInfoInputs>
-              <InputText
-                id={1}
-                title={'Title'}
-                onChangeHandler={titleChangeHandler}
-                ref={inputTitleRef}
-              />
-
-              <SelectOptions
-                id={1}
-                title={'File Type'}
-                options={[
-                  { value: 'image', name: 'IMAGE' },
-                  { value: 'video', name: 'VIDEO' },
-                  { value: 'gif', name: 'GIF' },
-                ]}
-                ref={inputTypeRef}
-                onChangeHandler={fileTypeChangeHandler}
-              />
-
-              <StyledInfoInput>
-                <InputText
-                  id={2}
-                  title={'Tags'}
-                  onKeyDownHandler={tagInputHandler}
-                  ref={inputTagsRef}
-                />
-                <button onClick={addTag}>Add Tag</button>
-              </StyledInfoInput>
-
-              {contentData.tags[0] && (
-                <StyledSelectedTags>
-                  {Array.isArray(contentData.tags) &&
-                    contentData.tags.map((tag, key) => (
-                      <div
-                        key={key}
-                        onClick={() => {
-                          removeTag(key);
-                        }}
-                      >
-                        {tag}
-                      </div>
-                    ))}
-                </StyledSelectedTags>
-              )}
-
-              <SelectC title={'Character & Media Content'} />
-
-              <SubmitBtn submitHandler={submitHandler} />
-            </StyledInfoInputs>
-          </>
+          <StyledSelectedContents>
+            {contentData.fileType === 'video' && (
+              <video ref={videoRef} src={contentData.file} controls={true} />
+            )}
+            {contentData.fileType === 'image' && (
+              <img src={contentData.file} alt={'image'} />
+            )}
+          </StyledSelectedContents>
         )}
+
+        <StyledInfoInputs>
+          <InputText
+            id={1}
+            title={'Title'}
+            onChangeHandler={titleChangeHandler}
+            inputRef={inputTitleRef}
+          />
+
+          <SelectOptions
+            id={1}
+            title={'File Type'}
+            options={[
+              { value: 'image', name: 'IMAGE' },
+              { value: 'video', name: 'VIDEO' },
+              { value: 'gif', name: 'GIF' },
+            ]}
+            inputRef={inputTypeRef}
+            onChangeHandler={fileTypeChangeHandler}
+          />
+
+          <StyledInfoInput>
+            <InputText
+              id={2}
+              title={'Tags'}
+              onKeyDownHandler={tagInputHandler}
+              inputRef={inputTagsRef}
+            />
+            <button onClick={addTag}>Add Tag</button>
+          </StyledInfoInput>
+
+          {contentData.tags[0] && (
+            <StyledSelectedTags>
+              {Array.isArray(contentData.tags) &&
+                contentData.tags.map((tag, key) => (
+                  <div
+                    key={key}
+                    onClick={() => {
+                      removeTag(key);
+                    }}
+                  >
+                    {tag}
+                  </div>
+                ))}
+            </StyledSelectedTags>
+          )}
+
+          <SearchSelect
+            title={'Character & Media Content'}
+            getData={getSearchSelectData}
+            link={{ to: '/add_character', title: 'Add Character' }}
+            inputRef={searchCharacterRef}
+          />
+
+          <SubmitBtn submitHandler={submitHandler} />
+        </StyledInfoInputs>
       </StyledUploadPage>
     </>
   );
