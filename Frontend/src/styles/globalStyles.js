@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
+import { colors } from './contants.js';
 
 const GlobalStyles = createGlobalStyle`
     @font-face {
@@ -11,10 +12,17 @@ const GlobalStyles = createGlobalStyle`
         font-family: 'KGHAPPY';
         src: url('/fonts/KGHAPPY.ttf') format('truetype');
     }
+    input {
+        color: black;
+    }
+    body{
+            background: ${colors.baseColor1};
+    }
 
     * {
         box-sizing: border-box;
         font-family : "Jua", "Inter", sans-serif;
+        color: white;
         ${reset};
     }
 

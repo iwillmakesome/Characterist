@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 import svgr from '@svgr/rollup';
 import path from 'path';
 
@@ -12,4 +12,4 @@ export default defineConfig({
       '@public': path.resolve(__dirname, './public'),
     },
   },
-})
+});

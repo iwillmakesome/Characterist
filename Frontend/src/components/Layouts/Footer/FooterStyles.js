@@ -10,18 +10,20 @@ export const StyledFooter = styled.footer`
   display: flex;
   justify-content: center;
   & > div {
-    background: ${colors.baseColor2};
     width: 100%;
     max-width: ${SEARCHBAR_WIDTH};
     height: ${FOOTER_HEIGHT};
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
     padding: 20px;
     border-radius: 10px 10px 0 0;
-    h1 {
-      font-size: 2em;
+    
+    background: ${colors.baseColor2};
+    &>*{
       color: white;
     }
-    div {
-      padding-top: 1em;
+    &>div {
       display: flex;
       gap: ${DEFAULT_GAP};
       a {

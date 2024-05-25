@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+// pages
 import LockPage from './LockPage.jsx';
 import MainPage from './MainPage/MainPage.jsx';
 import NotFound from './NotFound.jsx';
@@ -7,6 +8,8 @@ import ScenePage from './ScenePage/ScenePage.jsx';
 import UploadPage from './UploadPage/UploadPage.jsx';
 import ListPage from './ListPage/ListPage.jsx';
 import CharacterPage from './CharacterPage/CharacterPage.jsx';
+import AddCharacterPage from './UploadPage/AddCharacterPage.jsx';
+import AddMediaPage from './UploadPage/AddMediaPage.jsx';
 
 import Layout from '@/components/Layouts/Layout.jsx';
 import FilePreview from '@/components/FilePreview.jsx';
@@ -16,12 +19,16 @@ export const path = {
   root: '/',
   lock: '/lock',
   scene: '/scene/*',
-  upload: '/upload',
-  list: '/list',
-  file: '/file',
-  character: '/character',
-  works: '/works',
 
+  list: '/list',
+  character: '/character/*',
+  media: '/media/*',
+
+  upload: '/upload',
+  addCharacter: '/add_character',
+  addMedia: '/add_media',
+
+  file: '/file',
   notfound: '/*',
 };
 
@@ -43,6 +50,14 @@ export const router = createBrowserRouter([
         element: <UploadPage />,
       },
       {
+        path: path.addCharacter,
+        element: <AddCharacterPage />,
+      },
+      {
+        path: path.addMedia,
+        element: <AddMediaPage />,
+      },
+      {
         path: path.list,
         element: <ListPage />,
       },
@@ -55,7 +70,6 @@ export const router = createBrowserRouter([
         element: <WorksPage />,
       },
 
-      // extra
       {
         path: path.notfound,
         element: <NotFound />,

@@ -2,10 +2,8 @@ import styled from 'styled-components';
 import {
   colors,
   DEFAULT_GAP,
-  DEFAULT_HEIGHT,
   DEFAULT_SHADOW,
   GRADIENT_PURPLE,
-  GRADIENT_YELLOW,
 } from '@/styles/contants.js';
 
 export const StyledUploadPage = styled.div`
@@ -16,16 +14,6 @@ export const StyledUploadPage = styled.div`
   align-items: center;
   padding: 2em;
   gap: ${DEFAULT_GAP};
-  & > label {
-    padding: 1em 3em;
-    background: ${GRADIENT_YELLOW};
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-  }
-  & > input {
-    display: none;
-  }
   & > div:last-child {
     width: 100%;
     height: 100%;
@@ -75,15 +63,9 @@ export const StyledInfoInputs = styled.div`
   & > div {
     width: 70%;
   }
-
-  & > button {
-    padding: 1em 3em;
-    border-radius: 5px;
-    background: ${GRADIENT_PURPLE};
-    & > h3 {
-      color: white;
-      font-weight: bold;
-    }
+  input,
+  select {
+    font-size: 15px;
   }
 `;
 
@@ -93,30 +75,23 @@ export const StyledInfoInput = styled.div`
   align-items: center;
   gap: 1em;
   position: relative;
-  & > label {
-    width: 20%;
-    color: white;
-    white-space: nowrap;
-  }
-  & > input,
-  & > select {
-    width: 80%;
-    height: 3em;
-    border-radius: 5px;
-    border: none;
-    padding-left: 10px;
+  input {
+    padding-right: 60px !important;
   }
   & > button {
+    width: 60px;
     height: 100%;
     position: absolute;
     right: 0;
     padding: 10px;
     font-size: 10px;
+    color: black;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
     &:hover {
       background: ${colors.baseColor2};
       color: white;
-      cursor: pointer;
-      border-radius: 4px;
       box-shadow: 0 0 3px black;
     }
   }
@@ -131,7 +106,7 @@ export const StyledSelectedTags = styled.div`
   border-radius: 5px;
   overflow-x: scroll;
   white-space: nowrap;
-  background: ${colors.baseColor3};
+  border: 1px solid ${colors.baseColor3};
 
   &::-webkit-scrollbar {
     height: 6px;
@@ -144,10 +119,13 @@ export const StyledSelectedTags = styled.div`
 
   & > div {
     padding: 10px;
-    color: white;
-    background: ${colors.baseColor2};
+    background: ${colors.baseColor1};
     border-radius: 5px;
     cursor: pointer;
+    font-size: 15px;
+    &:hover {
+      background: ${colors.yellow2};
+    }
   }
 `;
 
@@ -155,9 +133,6 @@ export const StyledCharacterSelect = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
-  * {
-    color: white;
-  }
   & > div:first-child {
     display: flex;
     justify-content: space-between;
@@ -166,14 +141,30 @@ export const StyledCharacterSelect = styled.div`
     }
   }
   & > div:last-child {
+    height: 200px;
     display: flex;
     gap: 1em;
-    & > img {
+    & > div:first-child {
       width: 30%;
+
       border-radius: 5px;
-      object-fit: cover;
+      background: ${colors.baseColor1};
+      box-shadow: 0 0 10px -5px black inset;
+      overflow: hidden;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      & > div {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
-    & > div {
+    & > div:last-child {
       width: 70%;
       height: 100%;
       display: flex;
@@ -191,6 +182,7 @@ export const StyledCharacterSelect = styled.div`
           border: none;
           background: transparent;
           padding: 1em;
+          color: white;
         }
         & > h4 {
           position: absolute;
@@ -207,13 +199,23 @@ export const StyledCharacterSelect = styled.div`
         background: ${colors.baseColor1};
         border-radius: 5px;
         box-shadow: 0 0 10px -5px black inset;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: ${GRADIENT_PURPLE};
+          border-radius: 10000px;
+        }
         & > button {
+          display: flex;
+          justify-content: space-between;
           padding: 5px;
           border-radius: 5px;
           background: ${colors.baseColor1};
           font-size: 10px;
           cursor: pointer;
-          text-align: left;
           &:hover {
             background: ${colors.baseColor2};
           }
@@ -221,13 +223,4 @@ export const StyledCharacterSelect = styled.div`
       }
     }
   }
-`;
-
-export const StyledModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(10px);
 `;

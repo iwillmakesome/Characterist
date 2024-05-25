@@ -1,5 +1,5 @@
 import { StyledLoading } from '@/components/Loading/LoadingStyles.js';
-import LoadingGif from '../../../public/Loading.gif';
+import LoadingGif from '../../assets/Loading.gif';
 
 export default function Loading() {
   return (

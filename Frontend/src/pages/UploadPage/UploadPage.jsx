@@ -13,31 +13,29 @@ import {
 
 // components
 import Title from '@/components/Title.jsx';
-import CharacterModal from './CharacterModal.jsx';
-import BMO from '@public/bmo.png';
+import SubmitBtn from '@/components/Form/SubmitBtn.jsx';
+import SelectFileBtn from '@/components/Form/SelectFileBtn.jsx';
+import InputText from '@/components/Form/InputText.jsx';
+import SelectOptions from '@/components/Form/SelectOptions.jsx';
+import SelectC from './Select.jsx';
 
 export default function UploadPage() {
   const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
 
-  const inputTitle = useRef();
-  const inputType = useRef();
-  const inputTags = useRef();
+  const inputTitleRef = useRef();
+  const inputTypeRef = useRef();
+  const inputTagsRef = useRef();
 
   const videoRef = useRef();
 
-  const [contentFile, setContentFile] = useState();
-  const [fileType, setFileType] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [contentData, setContentData] = useState({
+    file: undefined,
     title: '',
     fileType: '',
     character: '',
-    works: '',
+    media: '',
     tags: [],
   });
-
-  // functions
 
   const fileSelectHandler = (e) => {
     const file = e.target.files[0];
@@ -45,31 +43,38 @@ export default function UploadPage() {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       const type = e.target.files[0].type.split('/')[0];
-      setFileType(type);
-      setContentFile(reader.result);
+      setContentData((cur) => {
+        const temp = { ...cur };
+        temp.file = reader.result;
+        temp.fileType = type;
+        return temp;
+      });
     };
+  };
+
+  const titleChangeHandler = () => {
+    contentData.title = inputTitleRef.current.value;
+  };
+
+  const fileTypeChangeHandler = () => {
+    contentData.fileType = inputTypeRef.current.value;
   };
 
   const tagInputHandler = (e) => {
     if (e.key === 'Enter') {
-      const inputValue = inputTags.current.value;
-      setContentData((cur) => {
-        const temp = { ...cur };
-        temp.tags.push(inputValue);
-        return temp;
-      });
-      inputTags.current.value = '';
+      addTag();
     }
   };
 
   const addTag = () => {
-    const inputValue = inputTags.current.value;
+    const inputValue = inputTagsRef.current.value;
+    if (inputValue === '') return;
     setContentData((cur) => {
       const temp = { ...cur };
       temp.tags.push(inputValue);
       return temp;
     });
-    inputTags.current.value = '';
+    inputTagsRef.current.value = '';
   };
 
   const removeTag = (key) => {
@@ -80,29 +85,14 @@ export default function UploadPage() {
     });
   };
 
-  const inputChangeHandler = (e) => {
-    setContentData((cur) => {
-      const temp = { ...cur };
-      if (e.target.id === 'title') {
-        temp.title = e.target.value;
-      } else if (e.target.id === 'character') {
-        temp.character = e.target.value;
-      } else if (e.target.id === 'works') {
-        temp.works = e.target.value;
-      } else if (e.target.id === 'fileType') {
-        temp.fileType = e.target.value;
-      }
-      return temp;
-    });
-  };
-
   const submitHandler = () => {
     console.log(contentData);
-    if (!contentData.title) {
-      alert('Title is required.');
-      inputTitle.current.focus();
-      return;
-    }
+    // if (!contentData.title) {
+    //   alert('Title is required.');
+    //   inputTitleRef.current.focus();
+    //   return;
+    // }
+
     // try {
     //   customAxios.post(`/scenes/upload`, contentData);
     // } catch (err) {
@@ -110,64 +100,54 @@ export default function UploadPage() {
     // }
   };
 
-  useEffect(() => {
-    if (!contentFile) return;
-    inputType.current.value = fileType;
-    setContentData((cur) => {
-      const temp = { ...cur };
-      temp.fileType = fileType;
-      return temp;
-    });
-  }, [fileType]);
-  const characters = ['asdf', 'bbb', 'ccc'];
-
   return (
     <>
-      {isModalOpen && <CharacterModal setIsModalOpen={setIsModalOpen} />}
       <StyledUploadPage>
-        <Title title={'Upload'} />
-        {!contentFile && (
-          <>
-            <label htmlFor={'file'}>Select File</label>
-            <input type='file' id={'file'} onChange={fileSelectHandler} />
-          </>
+        <Title title={'Form'} />
+        {!contentData.file && (
+          <SelectFileBtn
+            title={'Select File'}
+            fileSelectHandler={fileSelectHandler}
+          />
         )}
 
-        {contentFile && (
+        {contentData.file && (
           <>
             <StyledSelectedContents>
-              {fileType === 'video' && (
-                <video ref={videoRef} src={contentFile} controls={true} />
+              {contentData.fileType === 'video' && (
+                <video ref={videoRef} src={contentData.file} controls={true} />
               )}
-              {fileType === 'image' && <img src={contentFile} alt={'image'} />}
+              {contentData.fileType === 'image' && (
+                <img src={contentData.file} alt={'image'} />
+              )}
             </StyledSelectedContents>
+
             <StyledInfoInputs>
+              <InputText
+                id={1}
+                title={'Title'}
+                onChangeHandler={titleChangeHandler}
+                ref={inputTitleRef}
+              />
+
+              <SelectOptions
+                id={1}
+                title={'File Type'}
+                options={[
+                  { value: 'image', name: 'IMAGE' },
+                  { value: 'video', name: 'VIDEO' },
+                  { value: 'gif', name: 'GIF' },
+                ]}
+                ref={inputTypeRef}
+                onChangeHandler={fileTypeChangeHandler}
+              />
+
               <StyledInfoInput>
-                <label htmlFor={'title'}>Title</label>
-                <input
-                  id={'title'}
-                  ref={inputTitle}
-                  onChange={inputChangeHandler}
-                />
-              </StyledInfoInput>
-              <StyledInfoInput>
-                <label htmlFor={'fileType'}>File Type</label>
-                <select
-                  id={'fileType'}
-                  ref={inputType}
-                  onChange={inputChangeHandler}
-                >
-                  <option value={'image'}>IMAGE</option>
-                  <option value={'video'}>VIDEO</option>
-                  <option value={'gif'}>GIF</option>
-                </select>
-              </StyledInfoInput>
-              <StyledInfoInput>
-                <label htmlFor={'tags'}>Tags</label>
-                <input
-                  id={'tags'}
-                  ref={inputTags}
-                  onKeyDown={tagInputHandler}
+                <InputText
+                  id={2}
+                  title={'Tags'}
+                  onKeyDownHandler={tagInputHandler}
+                  ref={inputTagsRef}
                 />
                 <button onClick={addTag}>Add Tag</button>
               </StyledInfoInput>
@@ -188,36 +168,9 @@ export default function UploadPage() {
                 </StyledSelectedTags>
               )}
 
-              <StyledCharacterSelect>
-                <div>
-                  <h3>Character</h3>
-                  <button
-                    onClick={() => {
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    Add Character
-                  </button>
-                </div>
-                <div>
-                  <img src={BMO} alt='Character' />
-                  <div>
-                    <div>
-                      <input />
-                      <h4>Adventure Time</h4>
-                    </div>
-                    <div>
-                      <button>Auto Complete</button>
-                      <button>Auto Complete</button>
-                      <button>Auto Complete</button>
-                    </div>
-                  </div>
-                </div>
-              </StyledCharacterSelect>
+              <SelectC title={'Character & Media Content'} />
 
-              <button onClick={submitHandler}>
-                <h3>Submit</h3>
-              </button>
+              <SubmitBtn submitHandler={submitHandler} />
             </StyledInfoInputs>
           </>
         )}
