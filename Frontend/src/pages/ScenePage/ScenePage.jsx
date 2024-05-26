@@ -1,7 +1,6 @@
+// react
 import { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import copyToClipboard from '@/utils/copyToClipboard.js';
-import { customAxios } from '@/utils/customAxios.js';
+import { useParams, Link } from 'react-router-dom';
 
 // styles
 import {
@@ -20,71 +19,89 @@ import FlameSvg from '@/components/svgs/FlameSvg.jsx';
 import StarSvg from '@/components/svgs/StarSvg.jsx';
 import Loading from '@/components/Loading/Loading.jsx';
 
+// utils
+import copyToClipboard from '@/utils/copyToClipboard.js';
+import { customAxios } from '@/utils/customAxios.js';
+import data from '@public/developDatas/sceneData.json';
+import sampleImage from '@public/bmo.png';
+import sampleVideo from '@public/sample.mp4';
+
 export default function ScenePage() {
   const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
-  const [searchParams] = useSearchParams();
-  const queryId = searchParams.get('id');
+  const sceneId = useParams();
 
-  const [content, setContent] = useState();
+  const [contentData, setContentData] = useState();
+  const [flame, setFlame] = useState(0);
+  const [star, setStar] = useState(0);
 
-  const fetchData = async () => {
-    try {
-      const contentRes = await customAxios.get(`/scenes?id=${queryId}`);
-      setContent(contentRes.data);
-    } catch (err) {
-      console.error(err);
-    }
+  const getData = async () => {
+    setContentData(data);
+    setFlame(data.flame);
+    setStar(data.star);
+    console.log(sceneId.id);
+    // try {
+    //   const contentDataRes = await customAxios.get(`/scenes?id=${sceneId}`);
+    //   setContentData(contentDataRes.data);
+    //   flameRef.current = contentDataRes.data.flame;
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   const incFlame = () => {
-    customAxios.patch(`/content/flame?id=${queryId}`);
+    setFlame((cur) => {
+      return cur + 1;
+    });
+    // customAxios.patch(`/contentData/flame?id=${queryId}`);
   };
   const incStar = () => {
-    axios.patch(`${BACKEND_HOST}/content/star?id=${queryId}`);
+    setStar((cur) => {
+      return cur + 1;
+    });
+    // customAxios.patch(`${BACKEND_HOST}/contentData/star?id=${queryId}`);
   };
 
   useEffect(() => {
-    fetchData();
-    // incFlame();
+    getData();
+    incFlame();
   }, []);
 
-  if (content === undefined || !Array.isArray(content)) {
+  const renderContent = () => {
+    const src = `${BACKEND_HOST}/files?location=${contentData.location}`;
+
+    if (contentData.type === 'image') {
+      return <img src={sampleImage} alt={'img'} />;
+    } else {
+      return (
+        <video controls={true}>
+          <source src={sampleVideo} />
+        </video>
+      );
+    }
+  };
+
+  if (!contentData) {
     return <Loading />;
   }
 
-  if (content) {
+  if (contentData) {
     return (
       <StyledScenePage>
-        <StyledContent>
-          {content.type === 'image' ? (
-            <img
-              src={`${BACKEND_HOST}/files?location=${content.location}`}
-              alt={'img'}
-            />
-          ) : (
-            <>
-              <video controls={true}>
-                <source
-                  src={`${BACKEND_HOST}/files?location=${content.location}`}
-                />
-              </video>
-            </>
-          )}
-        </StyledContent>
+        <StyledContent>{renderContent()}</StyledContent>
 
         <StyledInfo>
           <StyledInfoBasic>
-            <h1>{content.title}</h1>
-            <Link to={`/character/${content.people}`}>{content.people}</Link>
-            <Link to={`/works/${content.view_group}`}>
-              {content.view_group}
+            <h1>{contentData.title}</h1>
+            <Link to={`/character/${contentData.character}`}>
+              {contentData.character}
             </Link>
+            <Link to={`/media/${contentData.media}`}>{contentData.media}</Link>
 
             <StyledTags>
-              <Link to={`/list?type=${content.type}`} key={0}>
-                {content.type}
+              <Link to={`/list?type=${contentData.type}`}>
+                {contentData.type}
               </Link>
-              {content.tags.map((tag, key) => (
+              {contentData.tags.map((tag, key) => (
                 <Link to={`/list?search=${tag}`} key={key + 1}>
                   {tag}
                 </Link>
@@ -94,27 +111,27 @@ export default function ScenePage() {
 
           <StyledInfoExtra>
             <StyledExtras>
-              <div>ID : {content.id}</div>
-              <div>Date : {content.date}</div>
+              <div>ID : {contentData.id}</div>
+              <div>Date : {contentData.date}</div>
             </StyledExtras>
             <StyledButtons>
               <button
                 onClick={() => {
                   copyToClipboard(
-                    content.location,
-                    `파일 위치가 복사되었습니다.\n${content.location}`
+                    window.location.href,
+                    `URL copied to clipboard\n[ ${window.location.href} ]`
                   );
                 }}
               >
-                Open File Location
+                Copy URL
               </button>
               <button>
                 <FlameSvg color={'white'} />
-                <div>{content.flame}</div>
+                <div>{flame}</div>
               </button>
               <button onClick={incStar}>
                 <StarSvg color={'white'} />
-                <div>{content.star}</div>
+                <div>{star}</div>
               </button>
             </StyledButtons>
           </StyledInfoExtra>

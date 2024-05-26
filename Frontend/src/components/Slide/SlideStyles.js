@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import { colors, DEFAULT_SHADOW } from '@/styles/contants.js';
+import { DEFAULT_BLUR } from '../../styles/contants.js';
 
 export const StyledSlide = styled.div`
   width: 100%;
   height: 500px;
-  background: white;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  background: ${colors.baseColor2};
   & > div:first-child {
     height: 100%;
     display: flex;
@@ -57,8 +56,9 @@ export const StyledPageBtn = styled.button`
   height: 10px;
   padding: 0;
   border-radius: 100000px;
-  box-shadow: 0 0 5px 1px gray;
-  background: ${(props) => (props.selected ? 'black' : 'white')};
+  box-shadow: ${(props) =>
+    props.selected ? `0 0 5px 1px ${colors.purple1}` : '0 0 5px 1px gray'};
+  background: ${(props) => (props.selected ? colors.purple1 : 'white')};
 `;
 
 export const StyledSections = styled.div`
@@ -73,31 +73,52 @@ export const StyledSection = styled.div`
   transform: ${(props) => ` translateX(-${props.$page}00%)`};
   position: relative;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  position: relative;
+  overflow: hidden;
 
-  & > div:first-child {
+  & > img {
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+  }
+  & > img:first-child {
+    width: 100%;
+    filter: blur(100px);
+  }
+  & > a {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
-    img {
+    position: absolute;
+    & > img {
       height: 100%;
-      object-fit: contain;
-      box-shadow: ${DEFAULT_SHADOW};
+      object-fit: cover;
     }
   }
 
-  & > div:last-child {
-    width: 100%;
-    height: 30%;
+  & > div:first-of-type {
     position: absolute;
-    bottom: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(transparent, black);
+    //filter: blur(10px);
+  }
+
+  & > div:last-child {
+    position: absolute;
+    width: 100%;
     padding: 2em;
     display: flex;
     flex-direction: column;
-
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    justify-content: flex-end;
+    bottom: 0;
     gap: 1em;
+
+    border-radius: 10px;
 
     & > div:first-of-type {
       display: flex;

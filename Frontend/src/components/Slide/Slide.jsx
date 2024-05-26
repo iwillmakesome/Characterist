@@ -55,16 +55,19 @@ export default function Slide({ files }) {
           <StyledSections>
             {files.map((content, key) => (
               <StyledSection key={key} $page={currentSlide}>
-                <div>
+                <img
+                  src={`${BACKEND_HOST}/files/preview?type=${content.type}&id=${content.id}`}
+                  alt={'img'}
+                />
+                <Link to={`/scene/${content.id}`}>
                   <img
                     src={`${BACKEND_HOST}/files/preview?type=${content.type}&id=${content.id}`}
                     alt={'img'}
                   />
-                  {/* no backend test */}
-                  {/*<img src={content.img} />*/}
-                </div>
+                </Link>
+                <div />
                 <div>
-                  <Link key={key} to={`/scene?id=${content.id}`}>
+                  <Link key={key} to={`/scene/${content.id}`}>
                     <h3>{content.title}</h3>
                   </Link>
                   <div>

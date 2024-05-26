@@ -1,12 +1,14 @@
-import { StyledTag } from '@/components/Tags/TagStyles.js';
+// react
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+
+// styles
+import { StyledTag } from './TagStyles.js';
 
 function setLinkTo(tagName, tagType) {
   if (tagType === 'character') {
-    return `/character?name=${tagName}`;
+    return `/character/${tagName}`;
   } else if (tagType === 'works') {
-    return `/works?name=${tagName}`;
+    return `/media/${tagName}`;
   } else if (tagType === 'fileType') {
     return `/list?type=${tagName}`;
   } else {
@@ -17,9 +19,9 @@ function setLinkTo(tagName, tagType) {
 export default function Tag({ tagName, tagType }) {
   return (
     <>
-      <StyledTag>
-        <Link to={setLinkTo(tagName, tagType)}>{tagName}</Link>
-      </StyledTag>
+      <Link to={setLinkTo(tagName, tagType)}>
+        <StyledTag>{tagName}</StyledTag>
+      </Link>
     </>
   );
 }

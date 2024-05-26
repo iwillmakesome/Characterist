@@ -1,8 +1,5 @@
-import { customAxios } from '@/utils/customAxios.js';
+// react
 import { useState, useRef, useEffect } from 'react';
-
-import data from '@public/developDatas/charactersData.json';
-import { useStore } from '@/components/Form/searchSelectStore.js';
 
 // styles
 import {
@@ -21,9 +18,12 @@ import InputText from '@/components/Form/InputText.jsx';
 import SelectOptions from '@/components/Form/SelectOptions.jsx';
 import SearchSelect from '@/components/Form/SearchSelect.jsx';
 
-export default function UploadPage() {
-  const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
+// utils
+import { useStore } from '@/components/Form/searchSelectStore.js';
+import { customAxios } from '@/utils/customAxios.js';
+import data from '@public/developDatas/charactersData.json';
 
+export default function UploadPage() {
   const inputTitleRef = useRef();
   const inputTypeRef = useRef();
   const inputTagsRef = useRef();

@@ -7,6 +7,7 @@ import {
   GRADIENT_YELLOW,
   SEARCHBAR_WIDTH,
 } from '@/styles/contants.js';
+import { DEFAULT_SHADOW } from '../../styles/contants.js';
 
 export const StyledScenePage = styled.div``;
 
@@ -20,8 +21,8 @@ export const StyledContent = styled.div`
   overflow: hidden;
   & > img,
   & > video {
-    background: white;
-    box-shadow: 0 0 50px gray;
+    background: gray;
+    box-shadow: ${DEFAULT_SHADOW};
     object-fit: contain;
   }
 `;

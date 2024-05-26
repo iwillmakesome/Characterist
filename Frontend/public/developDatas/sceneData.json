@@ -1,0 +1,12 @@
+{
+  "location": "sample.png",
+  "type": "image",
+  "title": "Bmo eat Toast",
+  "character": "Bmo",
+  "media": "Adventure Time",
+  "tags": ["t1", "t2"],
+  "id": "10a98b2c",
+  "date": "2020_02_20",
+  "flame": 20,
+  "star": 30
+}

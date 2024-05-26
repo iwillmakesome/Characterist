@@ -1,9 +1,8 @@
+// react
 import { useEffect, useState } from 'react';
-import { customAxios } from '@/utils/customAxios.js';
-import loadingCheck from '@/utils/loadingCheck.jsx';
 
 // styles
-import { StyledMainPage, StyledTagsWrapper } from './MainPageStyles.js';
+import { StyledMainPage } from './MainPageStyles.js';
 
 // components
 import Title from '@/components/Title.jsx';
@@ -11,14 +10,16 @@ import Slide from '@/components/Slide/Slide.jsx';
 import GroupViewBy from '@/components/GroupView/GroupViewBy.jsx';
 import ContentTypeList from '@/components/ContentTypeList/ContentTypeList.jsx';
 import Tags from '@/components/Tags/Tags.jsx';
+import Loading from '@/components/Loading/Loading.jsx';
+// utils
+import { customAxios } from '@/utils/customAxios.js';
+import loadingCheck from '@/utils/loadingCheck.jsx';
 
 export default function MainPage() {
-  const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
-
   const [recentPostData, setRecentPostData] = useState();
   const [lowViewData, setLowViewData] = useState();
   const [highViewData, setHighViewData] = useState();
-  const [worksData, setWorksData] = useState();
+  const [mediaData, setMediaData] = useState();
   const [charactersData, setCharactersData] = useState();
   const [tagsData, setTagsData] = useState();
   const [typeData, setTypeData] = useState();
@@ -34,8 +35,8 @@ export default function MainPage() {
       const highViewRes = await customAxios.get(`/scenes/high`);
       setHighViewData(highViewRes.data);
 
-      const worksDataRes = await customAxios.get(`/works`);
-      setWorksData(worksDataRes.data);
+      const mediaDataRes = await customAxios.get(`/media`);
+      setMediaData(mediaDataRes.data);
 
       const charactersDataRes = await customAxios.get(`/characters`);
       setCharactersData(charactersDataRes.data);
@@ -65,29 +66,29 @@ export default function MainPage() {
         <Title title={'Low Flame Suggest'}></Title>
         {loadingCheck(
           lowViewData,
-          <GroupViewBy imgFiles={lowViewData} key={1} />
+          <GroupViewBy groupData={lowViewData} key={1} />
         )}
       </div>
       <div>
         <Title title={'High Flame Suggest'}></Title>
         {loadingCheck(
           highViewData,
-          <GroupViewBy imgFiles={highViewData} key={2} />
+          <GroupViewBy groupData={highViewData} key={2} />
         )}
       </div>
 
       <div>
-        <Title title={'Works'}></Title>
+        <Title title={'Media Contents'}></Title>
         {loadingCheck(
-          worksData,
-          <GroupViewBy imgFiles={worksData} key={3} expansion={true} />
+          mediaData,
+          <GroupViewBy groupData={mediaData} key={3} expansion={true} />
         )}
       </div>
       <div>
-        <Title title={'Character'}></Title>
+        <Title title={'Characters'}></Title>
         {loadingCheck(
           charactersData,
-          <GroupViewBy imgFiles={charactersData} key={4} expansion={true} />
+          <GroupViewBy groupData={charactersData} key={4} expansion={true} />
         )}
       </div>
 

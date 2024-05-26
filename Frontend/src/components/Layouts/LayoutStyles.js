@@ -12,7 +12,7 @@ export const StyledLayout = styled.div`
   background: ${colors.baseColor1};
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
   }
 
   &::-webkit-scrollbar-thumb {

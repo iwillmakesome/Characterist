@@ -1,11 +1,12 @@
-import { useSearchParams } from 'react-router-dom';
+// react
+import { useSearchParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 // styles
 import {
   StyledCharacterPage,
   StyledProfile,
+  StyledTagsContainer,
 } from '@/pages/CharacterPage/CharacterPageStyles.js';
 
 // components
@@ -15,59 +16,32 @@ import Title from '@/components/Title.jsx';
 import Pagination from '@/components/Pagination/Pagination.jsx';
 import Loading from '@/components/Loading/Loading.jsx';
 import ProfileTags from '@/components/ProfileTags/ProfileTags.jsx';
-import BMO from '../../../public/bmo.png';
+
+// utils
+import { customAxios } from '@/utils/customAxios.js';
+import BMO from '@public/jake.png';
+import data from '@public/developDatas/characterData.json';
 
 export default function CharacterPage() {
-  const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
   const [searchParams] = useSearchParams();
-  const characterName = searchParams.get('name');
-  const [data, setData] = useState();
-  const tags = [
-    { tagName: 'test', tagLink: 'test' },
-    { tagName: 'test', tagLink: 'test' },
-    { tagName: 'test', tagLink: 'test' },
-    { tagName: 'test', tagLink: 'test' },
-  ];
-  const [listData, setListData] = useState();
-
-  useEffect(() => {
-    // setData({
-    //   characterWorks: 'Adventure Time',
-    //   flame: 0,
-    //   star: 0,
-    //   contents: 0,
-    //   image: 0,
-    //   video: 0,
-    //   gif: 0,
-    // });
-    setListData([
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-      { id: 18, type: 'image', title: 'test', flame: 10, star: 20 },
-    ]);
-  }, []);
+  const [characterData, setCharacterData] = useState({});
 
   const getData = () => {
-    axios
-      .get(`${BACKEND_HOST}/views?id=${queryId}`)
-      .then((res) => {
-        console.log(res.data);
-        setContent(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(true);
-      });
+    setCharacterData(data);
   };
 
-  if (data === undefined) {
+  useEffect(() => {
+    // characterData.name = searchParams.get('name');
+
+    setCharacterData((cur) => {
+      const temp = { ...cur };
+      temp.name = searchParams.get('name');
+      return temp;
+    });
+    getData();
+  }, []);
+
+  if (!data) {
     return <Loading />;
   }
 
@@ -80,14 +54,21 @@ export default function CharacterPage() {
             <img src={BMO} />
           </div>
           <div>
-            <h2>{characterName}</h2>
-            <h3>{data.characterWorks}</h3>
+            <h1>{characterData.name}</h1>
+            <h3>
+              <Link to={`/media/${characterData.media}`}>
+                {characterData.media}
+              </Link>
+            </h3>
             <ProfileTags data={data} />
           </div>
         </StyledProfile>
+
         <Title title={'Tags'}></Title>
-        <Tags tags={tags} />
-        <List listData={listData} />
+        <Tags tags={characterData.tags} />
+
+        <Title title={'Media Contents'}></Title>
+        <List listData={characterData.list} />
         <Pagination />
       </StyledCharacterPage>
     </>

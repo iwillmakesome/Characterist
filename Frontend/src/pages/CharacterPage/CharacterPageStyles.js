@@ -10,12 +10,10 @@ import {
 export const StyledCharacterPage = styled.div`
   width: 100%;
   display: flex;
-  & > div {
-    width: 100%;
-  }
 `;
 
 export const StyledProfile = styled.div`
+  width: 100%;
   height: 400px;
   display: flex;
   justify-content: space-between;
@@ -29,7 +27,7 @@ export const StyledProfile = styled.div`
     & > img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       border-radius: 10px;
     }
     & > img:first-child {
@@ -47,4 +45,8 @@ export const StyledProfile = styled.div`
     justify-content: flex-end;
     gap: 20px;
   }
+`;
+
+export const StyledTagsContainer = styled.div`
+  padding: 0 10px;
 `;

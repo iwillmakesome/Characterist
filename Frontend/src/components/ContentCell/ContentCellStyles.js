@@ -11,7 +11,7 @@ export const StyledContentCell = styled.div`
   gap: 1em;
   & > a {
     width: 100%;
-    height: 85%;
+    height: 90%;
     display: flex;
     align-items: center;
     gap: 1em;
@@ -22,6 +22,7 @@ export const StyledContentCell = styled.div`
       width: 100%;
       object-fit: contain;
       box-shadow: ${DEFAULT_SHADOW};
+      background: gray;
     }
   }
 `;
@@ -31,8 +32,9 @@ export const StyledInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 0 10px;
 
-  & > a:first-child > h3 {
+  & > h3 {
     height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -50,12 +52,13 @@ export const StyledInfo = styled.div`
 `;
 
 export const StyledProfileInfo = styled.div`
-  height: 15%;
+  height: 10%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
 
-  h3 {
+  & > h3 {
     height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;

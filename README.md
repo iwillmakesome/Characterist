@@ -41,6 +41,12 @@ Website for sharing character pictures
 - `[func]`
 - `[fix]`
 
+### import Rule
+1. react
+2. styles
+3. components
+4. utils (functions, stores)
+
 </div>
 </details>
 
