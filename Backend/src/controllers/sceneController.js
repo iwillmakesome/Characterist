@@ -1,11 +1,28 @@
 const sceneModel = require('../models/sceneModel');
 const tagModel = require('../models/tagModel');
+const multerConfig = require('../utils/multerConfig');
 
 // Create
 exports.createScene = async (req, res, next) => {
   try {
+    const upload = multerConfig('scenes').single('file');
+    await new Promise((resolve, reject) => {
+      upload(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const fileName = req.file.fileName;
+    const metadata = JSON.parse(req.body.metadata);
+
+    console.log('fileName :', fileName, 'metadata :', metadata);
+
     const resultID = await new Promise((resolve, reject) => {
-      sceneModel.createScene(req, (err, result) => {
+      sceneModel.createScene(req, fileName, metadata, (err, result) => {
         if (err) {
           reject(new Error(err));
         } else {
@@ -13,26 +30,8 @@ exports.createScene = async (req, res, next) => {
         }
       });
     });
+
     res.send(`Scene Added with ID: ${resultID}`);
-  } catch (err) {
-    next(err);
-  }
-};
-
-// remove this one
-exports.createScenesByDir = async (req, res, next) => {
-  try {
-    const result = await new Promise((resolve, reject) => {
-      sceneModel.createScenesByDir(req, (err, result) => {
-        if (err) {
-          reject(new Error(err));
-        } else {
-          resolve(result);
-        }
-      });
-    });
-
-    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -161,52 +160,6 @@ exports.searchScenes = (req, res, next) => {
 };
 
 // Update
-
-exports.updateInitScene = async (req, res, next) => {
-  try {
-    const { id, type, title, character, works, tags } = req.body;
-    const sceneData = { id, type, title, character, works };
-
-    // update Initial Scene
-    await new Promise((resolve, reject) => {
-      sceneModel.updateInitScene(sceneData, (err) => {
-        if (err) {
-          reject(new Error(err));
-        } else {
-          resolve();
-        }
-      });
-    });
-    for (const tag of tags) {
-      // update Tag Table
-      const tagId = await new Promise((resolve, reject) => {
-        tagModel.createTag(tag, (err, result) => {
-          if (err) {
-            reject(new Error(err));
-          } else {
-            resolve(result);
-          }
-        });
-      });
-
-      const tagData = { tag_id: tagId.id, scene_id: sceneData.id };
-      // update Tag and Scene Table
-      await new Promise((resolve, reject) => {
-        tagModel.createTagAndSceneRelation(tagData, (err) => {
-          if (err) {
-            reject(new Error(err));
-          } else {
-            resolve();
-          }
-        });
-      });
-    }
-
-    res.send(500);
-  } catch (err) {
-    next(err);
-  }
-};
 
 // Delete
 exports.deleteSceneById = (req, res, next) => {

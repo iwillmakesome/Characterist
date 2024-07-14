@@ -10,6 +10,8 @@ import Tags from '../Tags/Tags.jsx';
 import FlameSvg from '../svgs/FlameSvg.jsx';
 import StarSvg from '../svgs/StarSvg.jsx';
 
+import bg from '@public/bmoBG.png';
+
 export default function ContentCell({ contentData }) {
   const BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
 
@@ -17,7 +19,8 @@ export default function ContentCell({ contentData }) {
     <StyledContentCell>
       <Link to={`/scene/${contentData.id}`}>
         <img
-          src={`${BACKEND_HOST}/files/preview?type=${contentData.type}&id=${contentData.id}`}
+          // src={`${BACKEND_HOST}/files/preview?type=${contentData.type}&id=${contentData.id}`}
+          src={bg}
           alt={'img'}
         />
       </Link>

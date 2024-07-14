@@ -6,20 +6,21 @@ const createTable = `
       CREATE TABLE IF NOT EXISTS Scenes(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
-        location TEXT UNIQUE,
-        type TEXT,
-        title TEXT DEFAULT 'TEMP',
-        character TEXT DEFAULT 'TEMP',
-        works TEXT DEFAULT 'TEMP',
+        title TEXT DEFAULT 'Title',
+        character TEXT DEFAULT 'Character',
+        media TEXT DEFAULT 'Media',
+        tags TEXT DEFAULT 'Tags',
+        fileName TEXT,
+        fileType TEXT,
         flame INTEGER DEFAULT 0,
         star INTEGER DEFAULT 0
       );
     `;
 
 // Create
-exports.createScene = (req, callback) => {
-  const { location, type, title, people, group, flame, star } = req.body;
+exports.createScene = (req, fileName, metadata, callback) => {
   const date = Date.now();
+  const { title, character, media, tags, fileType } = metadata;
 
   db.serialize(() => {
     db.run(createTable, (err) => {
@@ -30,9 +31,9 @@ exports.createScene = (req, callback) => {
 
     db.run(
       `
-     INSERT INTO Scenes(date, location, type, title, character, works, flame, star) VALUES (?,?,?,?,?,?,?,?);
+     INSERT INTO Scenes(date, title, character, media, tags, fileName, fileType) VALUES (?,?,?,?,?,?,?);
     `,
-      [date, location, type, title, character, works, tags, flame, star],
+      [date, title, character, media, tags, fileName, fileType],
       (err) => {
         if (err) {
           callback(err);
@@ -51,72 +52,7 @@ exports.createScene = (req, callback) => {
   });
 };
 
-exports.createScenesByDir = async (req, callback) => {
-  const { directory } = req.body;
-  // const date = Date.now();
-  const date = 1711806402708;
-  console.log(directory);
-
-  try {
-    await new Promise((resolve, reject) => {
-      db.run(createTable, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-
-    const files = await fs.promises.readdir(directory);
-    for (const file of files) {
-      const location = `${directory}\\${file}`;
-      const type = getFileType(file);
-
-      await new Promise((resolve, reject) => {
-        db.run(
-          `
-            INSERT OR IGNORE INTO Scenes(date, title, location, type) VALUES (?,?,?,?);
-          `,
-          [date, file, location, type],
-          (err) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          }
-        );
-      });
-    }
-
-    const result = await new Promise((resolve, reject) => {
-      db.all(
-        `
-          SELECT * FROM Scenes WHERE date = ?
-        `,
-        [date],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(rows);
-          }
-        }
-      );
-    });
-
-    console.log(result);
-    callback(null, result);
-  } catch (error) {
-    console.error(error);
-    callback(error);
-  }
-};
-
 // Read
-
-// dont need this one
 exports.getAllScenes = (callback) => {
   db.all(`SELECT * FROM Scenes`, callback);
 };
@@ -202,18 +138,6 @@ exports.searchScenes = (search, callback) => {
 };
 
 // Update
-exports.updateInitScene = async (reqData, callback) => {
-  const { id, title, character, works } = reqData;
-  db.run(
-    `
-    UPDATE Scenes SET title = ?, character = ?, works = ? WHERE id = ?;
-  `,
-    [title, character, works, id],
-    (err) => {
-      callback(err);
-    }
-  );
-};
 
 // Delete
 exports.deleteSceneById = (id, callback) => {

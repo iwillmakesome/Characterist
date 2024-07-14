@@ -6,6 +6,7 @@ import {
   GRADIENT_PURPLE,
   GRADIENT_YELLOW,
   SEARCHBAR_WIDTH,
+  DEFAULT_IMAGE_BACKGROUND,
 } from '@/styles/contants.js';
 import { DEFAULT_SHADOW } from '../../styles/contants.js';
 
@@ -14,15 +15,17 @@ export const StyledScenePage = styled.div``;
 export const StyledContent = styled.div`
   width: 100%;
   height: 70%;
-  background: ${colors.baseColor2};
+  //background: ${colors.baseColor2};
+
+  background: ${DEFAULT_IMAGE_BACKGROUND};
   border-radius: 10px;
   display: flex;
   justify-content: center;
   overflow: hidden;
   & > img,
   & > video {
-    background: gray;
-    box-shadow: ${DEFAULT_SHADOW};
+    // background: gray;
+    // box-shadow: ${DEFAULT_SHADOW};
     object-fit: contain;
   }
 `;

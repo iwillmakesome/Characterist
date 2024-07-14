@@ -1,4 +1,5 @@
 const db = require('../config/database');
+
 const createTagTable = `
     CREATE TABLE IF NOT EXISTS Tags(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -6,6 +7,7 @@ const createTagTable = `
         searchCount INTEGER
     );
 `;
+
 const createTagAndViewTable = `
       CREATE TABLE IF NOT EXISTS TagAndView(
         tag_id INTEGER,

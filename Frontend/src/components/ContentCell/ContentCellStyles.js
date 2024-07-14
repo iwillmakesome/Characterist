@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { colors, DEFAULT_SHADOW } from '@/styles/contants.js';
+import {
+  colors,
+  DEFAULT_SHADOW,
+  DEFAULT_IMAGE_BACKGROUND,
+} from '@/styles/contants.js';
 
 export const StyledContentCell = styled.div`
   width: 100%;
@@ -15,14 +19,15 @@ export const StyledContentCell = styled.div`
     display: flex;
     align-items: center;
     gap: 1em;
-    background: ${colors.baseColor2};
+    //background: ${colors.baseColor2};
+    background: ${DEFAULT_IMAGE_BACKGROUND};
     border-radius: 10px;
     overflow: hidden;
     & > img {
       width: 100%;
       object-fit: contain;
-      box-shadow: ${DEFAULT_SHADOW};
-      background: gray;
+      //box-shadow: ${DEFAULT_SHADOW};
+      //background: gray;
     }
   }
 `;

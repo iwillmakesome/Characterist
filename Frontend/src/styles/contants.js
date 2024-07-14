@@ -8,6 +8,8 @@ export const DEFAULT_SHADOW = '0 0 5px 5px gray';
 export const GRADIENT_PURPLE = 'linear-gradient(45deg, #A45CFF, #d3b0ff)';
 export const GRADIENT_YELLOW = 'linear-gradient(45deg, #FFB800, #ff7a2c)';
 export const DEFAULT_BLUR = 'blur(20px)';
+export const DEFAULT_IMAGE_BACKGROUND =
+  'radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);';
 
 export const colors = {
   baseColor1: '#353535',

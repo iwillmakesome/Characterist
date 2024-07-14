@@ -31,29 +31,33 @@ export default function UploadPage() {
   const searchCharacterRef = useRef();
 
   const [contentData, setContentData] = useState({
-    file: undefined,
     title: '',
     fileType: '',
     character: '',
     media: '',
     tags: [],
   });
+  const [contentPreview, setContentPreview] = useState();
+  const [contentFile, setContentFile] = useState();
 
   const setSearchedData = useStore((state) => state.setSearchedData);
   const selectedData = useStore((state) => state.selectedData);
 
   const fileSelectHandler = (e) => {
     const file = e.target.files[0];
+    setContentFile(file);
+
+    const type = e.target.files[0].type.split('/')[0];
+    setContentData((cur) => {
+      const temp = { ...cur };
+      temp.fileType = type;
+      return temp;
+    });
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      const type = e.target.files[0].type.split('/')[0];
-      setContentData((cur) => {
-        const temp = { ...cur };
-        temp.file = reader.result;
-        temp.fileType = type;
-        return temp;
-      });
+      setContentPreview(reader.result);
     };
   };
 
@@ -113,7 +117,7 @@ export default function UploadPage() {
 
   const submitHandler = async () => {
     console.log(contentData);
-    if (!contentData.file) {
+    if (!contentFile) {
       alert('File is required.');
       return;
     }
@@ -129,12 +133,15 @@ export default function UploadPage() {
     }
     alert('submitted');
 
-    // backend connection
-    // try {
-    //   customAxios.post(`/scenes/upload`, contentData);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      const formData = new FormData();
+      formData.append('file', contentFile);
+      formData.append('metadata', JSON.stringify(contentData));
+
+      customAxios.post(`/scenes`, formData);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -151,13 +158,13 @@ export default function UploadPage() {
           fileSelectHandler={fileSelectHandler}
         />
 
-        {contentData.file && (
+        {contentPreview && (
           <StyledSelectedContents>
             {contentData.fileType === 'video' && (
-              <video ref={videoRef} src={contentData.file} controls={true} />
+              <video ref={videoRef} src={contentPreview} controls={true} />
             )}
             {contentData.fileType === 'image' && (
-              <img src={contentData.file} alt={'image'} />
+              <img src={contentPreview} alt={'image'} />
             )}
           </StyledSelectedContents>
         )}

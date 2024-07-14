@@ -6,6 +6,7 @@ import {
   GRADIENT_PURPLE,
   GRADIENT_YELLOW,
 } from '@/styles/contants.js';
+import { DEFAULT_IMAGE_BACKGROUND } from '../../styles/contants.js';
 
 export const StyledCharacterPage = styled.div`
   width: 100%;

@@ -1,4 +1,9 @@
 {
+  "name": "characterist",
+  "version": "0.0.0",
+  "scripts": {
+    "start" : "echo Start"
+  },
   "devDependencies": {
     "prettier": "^3.2.5"
   },

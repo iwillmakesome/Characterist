@@ -2,11 +2,23 @@ const express = require('express');
 const router = express.Router();
 const SceneController = require('../controllers/sceneController');
 
+// const multer = require('multer');
+// const path = require('path');
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const uploadPath = path.join(__dirname, '../../public', '/scenes');
+//     console.log(uploadPath);
+//     cb(null, uploadPath);
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + path.extname(file.originalname)); // 파일 이름 설정
+//   },
+// });
+
+// const upload = multer({ storage: storage });
+//
 // Create
 router.post('/', SceneController.createScene);
-
-// remove this one
-router.post('/directory', SceneController.createScenesByDir);
 
 // Read
 router.get('/', (req, res, next) => {
@@ -28,8 +40,6 @@ router.get('/low', SceneController.getLowViewScenes);
 router.get('/high', SceneController.getHighViewScenes);
 
 // Update
-// remove this one
-router.patch('/init', SceneController.updateInitScene);
 
 // Delete
 router.delete('/', SceneController.deleteSceneById);

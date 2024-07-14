@@ -25,6 +25,7 @@ export default function LockPage() {
     <>
       <StyledBackground>
         <LockSVG color={colors.baseColor3} width={100} height={100} />
+        88988
         <input
           type='password'
           onKeyDown={(e) => {
